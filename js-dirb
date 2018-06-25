@@ -1,0 +1,60 @@
+var wordlist = []
+var refs = []
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                
+                wordlist = allText.split('\n')
+                
+
+                ;
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+readTextFile("https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/raft-small-files.txt");
+console.log(wordlist)
+var k = 0 
+wordlist.forEach(function(item,i,arr){
+    
+    dirbuster("https://owa.allians.ml/"+item, k)
+    k = k + 75
+
+})
+
+
+
+
+function dirbuster(item, timeout){
+
+
+setTimeout(function() {
+  fetch(item).then(function (response) {
+            return response.status
+        }).then(function(data){
+            addRef(data,item)
+        })
+}, timeout);
+
+} 
+
+
+
+function addRef(status,ref){
+    if(status!=404){
+        refs.push(str(status) + ":" + ref)
+        console.log(str(status) + ":" + ref)
+    }
+    
+}
+
